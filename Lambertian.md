@@ -1,3 +1,3 @@
 # Lambertian
 1. Face Liveness Detection Based on Texture and Frequency Analyses.
-https://docs.google.com/document/d/16tCB350xrWrO_B8jXeMepZpO3RtyXKCU/edit
+[Link](https://drive.google.com/drive/u/0/folders/16AN-oSB6fW4fhcasBYLBCe9YCZY6wnc3)
