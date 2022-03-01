@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 
 def SplitFrame(image):
+    y1_crop = 0
     img_gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
     edges = cv2.Canny(img_gray,50,150)
@@ -19,24 +20,30 @@ def SplitFrame(image):
     frame = image[y1_crop:, :]
     frame_gray = img_gray[y1_crop:, :]
 
-    frame_binary_light = cv2.threshold(frame_gray,33,255,cv2.THRESH_BINARY)[1]
-    frame_binary_dark = cv2.threshold(frame_gray,32,255,cv2.THRESH_BINARY_INV)[1]
+    thread = frame_gray[5][5]
+    print(thread)
+
+    frame_binary_light = cv2.threshold(frame_gray,thread+1.5,255,cv2.THRESH_BINARY)[1]
+    frame_binary_dark = cv2.threshold(frame_gray,thread-1.5,255,cv2.THRESH_BINARY_INV)[1]
     frame_binary = cv2.bitwise_or(frame_binary_light,frame_binary_dark)
     kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (15, 1))
     frame_dilation = cv2.morphologyEx(frame_binary, cv2.MORPH_DILATE, kernel)
+
     # cv2.imshow("f", frame)
     # cv2.imshow("fbl", frame_binary_light)
     # cv2.imshow("fbd", frame_binary_dark)
     # cv2.imshow("fb", frame_binary)
     # cv2.imshow("fd",frame_dilation)
+
     list_line_frame = []
 
     cnts, hierarchy = cv2.findContours(frame_dilation.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[-2:]
     temp_c = sorted(cnts, key=cv2.contourArea, reverse=True)
     max_area = cv2.contourArea(temp_c[0])
+    perimeter_first = cv2.arcLength(temp_c[0], True)
     for c in temp_c:
         area = cv2.contourArea(c)
-        if(area/max_area >= 0.9):
+        if(area/max_area >= 0.5):
             x, y, w, h = cv2.boundingRect(c)
             list_line_frame.append({"color":frame.copy()[y:y + h, x:x + w],"binary":frame_binary.copy()[y:y + h, x:x + w]})
 
@@ -56,9 +63,12 @@ def SplitFrame(image):
         max_area = cv2.contourArea(temp_c[0])
         for c in temp_c:
             area = cv2.contourArea(c)
-            if (area / max_area >= 0.9):
-                x, y, w, h = cv2.boundingRect(c)
-                list_split_frame.append(line_frame["color"].copy()[y:y + h, x:x + w])
+            if (area/max_area >= 0.5):
+                perimeter = cv2.arcLength(c, True)
+                ratio = perimeter / math.sqrt(area)
+                if(ratio <= 5):
+                    x, y, w, h = cv2.boundingRect(c)
+                    list_split_frame.append(line_frame["color"].copy()[y:y + h, x:x + w])
     return list_split_frame
 
 import matplotlib.pyplot as plt
