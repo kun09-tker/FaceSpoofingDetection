@@ -2,7 +2,6 @@ import cv2
 import numpy as np
 
 def SplitFrame(image):
-    y1_crop = 0
     img_gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
     edges = cv2.Canny(img_gray,50,150)
@@ -17,19 +16,21 @@ def SplitFrame(image):
     if(y1_crop > y2_crop):
         y1_crop,y2_crop = y2_crop,y1_crop
 
-    frame = image[y1_crop:, :]
-    frame_gray = img_gray[y1_crop:, :]
+    if((y2_crop-y1_crop)/image.shape[0] <= 0.7):
+        y2_crop = image.shape[0]
+
+    frame = image[y1_crop:y2_crop, :]
+    frame_gray = img_gray[y1_crop:y2_crop, :]
 
     thread = frame_gray[5][5]
-    print(thread)
 
-    frame_binary_light = cv2.threshold(frame_gray,thread+1.5,255,cv2.THRESH_BINARY)[1]
-    frame_binary_dark = cv2.threshold(frame_gray,thread-1.5,255,cv2.THRESH_BINARY_INV)[1]
-    frame_binary = cv2.bitwise_or(frame_binary_light,frame_binary_dark)
+    frame_binary_light_background = cv2.threshold(frame_gray,thread+1.5,255,cv2.THRESH_BINARY)[1]
+    frame_binary_dark_background = cv2.threshold(frame_gray,thread-1.5,255,cv2.THRESH_BINARY_INV)[1]
+    frame_binary = cv2.bitwise_or(frame_binary_light_background,frame_binary_dark_background)
     kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (15, 1))
     frame_dilation = cv2.morphologyEx(frame_binary, cv2.MORPH_DILATE, kernel)
 
-    # cv2.imshow("f", frame)
+    cv2.imshow("f", frame)
     # cv2.imshow("fbl", frame_binary_light)
     # cv2.imshow("fbd", frame_binary_dark)
     # cv2.imshow("fb", frame_binary)
@@ -40,7 +41,6 @@ def SplitFrame(image):
     cnts, hierarchy = cv2.findContours(frame_dilation.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[-2:]
     temp_c = sorted(cnts, key=cv2.contourArea, reverse=True)
     max_area = cv2.contourArea(temp_c[0])
-    perimeter_first = cv2.arcLength(temp_c[0], True)
     for c in temp_c:
         area = cv2.contourArea(c)
         if(area/max_area >= 0.5):
