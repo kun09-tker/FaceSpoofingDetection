@@ -17,5 +17,4 @@ while True:
     capture_video.write(capture_final)
     if cv2.waitKey(10) == ord('q'):
         break
-capture_video.release()
 
