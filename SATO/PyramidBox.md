@@ -2,6 +2,8 @@
 <h1>PyramidBox: A Context-assisted Single Shot
 Face Detector</h1>
 
+>Task : `Face Detection`
+
 > Improve the utilization of contextual information in the following three
 aspects :
 > - Design a novel context anchor to supervise high-level
@@ -12,7 +14,7 @@ Low-level facial feature together, which also allows the PyramidBox to
 predict faces of all scales in a single shot.
 > - Introduce a contextsensitive structure to increase the capacity of prediction network to improve the final accuracy of output.
 
-> **Method**:  Low-level Feature Pyramid
+> **Method**: Low-level Feature Pyramid
 Networks
 
 > **Backbone**: VGG16
