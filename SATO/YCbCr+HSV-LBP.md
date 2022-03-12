@@ -21,6 +21,8 @@ more tolerant to illumination variation assuming that the acquisition conditions
 
 >**Model** : SVM (Support Vector Machine)
 
+>**Metric** : Equal Error Rate (EER): 0.4
+
 >**Dataset** : Replay-Attack
 
 
