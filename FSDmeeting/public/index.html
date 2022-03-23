@@ -7,8 +7,7 @@
         .containers {
             display: grid;
             grid-gap: 5px;
-            grid-template-columns: repeat(auto-fit, 1fr);
-            grid-template-rows: repeat(auto-fit, 300px);
+            grid-template-columns: repeat(4,1fr);
         }
 
         .container {
@@ -16,8 +15,10 @@
         }
 
         .vid {
-            flex: 0 1 auto;
+            width: 100%;
+            object-fit: cover;
             height: 400px;
+            display: block;
         }
 
         .settings {
@@ -36,16 +37,16 @@
 </head>
 
 <body>
-    <div id="videos" class="container">
+    <button id="record" class="settings" onclick="toggleRecord()">Record</button>
+    <div id="videos" class="containers">
         <video id="localVideo" class="vid" autoplay muted></video>
     </div>
     <br />
     <div style="display:block">
-        <button id="switchButton" class="settings" onclick="switchMedia()">Switch
-            Camera</button>
-        <button id="muteButton" class="settings" onclick="toggleMute()">Unmuted</button>
+        <button id="muteButton" class="settings" onclick="toggleMute()">Speaking</button>
         <button id="vidButton" class="settings" onclick="toggleVid()">Video Enabled</button>
     </div>
+    
 </body>
 <footer>
     <script src='/js/main.js' lang="text/javascript"></script>
