@@ -280,21 +280,28 @@ function removeLocalStream() {
   canvas.height = video_t.videoHeight;
   canvas.getContext('2d').drawImage(video_t, 0, 0);
   const data = canvas.toDataURL();
-  const formData = new FormData();
-  formData.append("image",data);
-  formData.append("name",video_t.id);
-  return formData;
+  // const formData = new FormData();
+  // formData.append("image",data);
+  // formData.append("name",video_t.id);
+  return data;
 }
 
 
 function toggleRecord() {
-  for (let vid of videos.children) {
-    form = getFrame(vid);
-    fetch('https://localhost:8000/dataFrame',{
-      method: 'post',
-      body: form,
-    })
+  const formData = new FormData(); 
+  for(let i = 0; i < 10; i++){
+    for (let vid of videos.children) {
+      const dict = {
+        frame: getFrame(vid),
+        name: vid.id
+      };
+      formData.append("listFrame", JSON.stringify(dict))
+    }
   }
+  fetch('https://localhost:8000/dataFrame',{
+    method: 'post',
+    body: formData,
+  })
 }
 
 

@@ -6,6 +6,7 @@ const app = express()
 const httpolyglot = require('httpolyglot')
 const https = require('https')
 const cors = require("cors");
+const axios = require('axios');
 var appRoot = require('app-root-path');
 app.use(cors());
 ////// CONFIGURATION ///////////
@@ -22,12 +23,6 @@ const storage = multer.diskStorage({
       cb(null, './uploads/')
   },
   filename: (req, file, cb) => {
-      // will insert even if file existed
-      // const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
-      // cb(null, uniqueSuffix + '-' + file.originalname)
-
-      // will not insert if file existed
-      console.log(file);
       cb(null, file.originalname)
   }
 });
@@ -51,34 +46,17 @@ var upload = multer({
   fileFilter: fileFilter
 });
 
-list_info = [];
 
-app.post('/dataFrame', upload.single('image'), (req, res, next) => {
-  const file = req.body.image
-  const filename = req.body.name
-  list_info.push({
-    image : file,
-    name : filename
+app.post('/dataFrame', upload.single('image'), async (req, res, next) => {
+  const file = req.body.listFrame;
+  // res.json({
+  //   frameArray: file,
+  // })
+  const response = await axios.post('http://localhost:3000/Frame', {
+    frameArray : file,
   })
-  res.json({
-    image : file,
-    name : filename
-  })
-
-  // fs.writeFile('./frameData/'+filename+'.txt', file, function (err) {
-  //   if (err) throw err;
-  // });
-  if (!file) {
-    const error = new Error('Please upload a file')
-    error.httpStatusCode = 400
-    return next(error)
-  }
-  
+  res.send(response.data)
 })
-
-app.get("/dataFrame",(req,res)=>{
-    res.json(list_info)
-})  
 
 require('./routes')(app)
 
