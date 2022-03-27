@@ -1,3 +1,4 @@
+// const { response } = require("express");
 
 /**
  * Socket.io socket
@@ -287,21 +288,23 @@ function removeLocalStream() {
 }
 
 
-function toggleRecord() {
+async function toggleRecord() {
   const formData = new FormData(); 
-  for(let i = 0; i < 10; i++){
-    for (let vid of videos.children) {
+  for (let vid of videos.children){
+    for(let i = 0; i < 10; i++){
       const dict = {
         frame: getFrame(vid),
         name: vid.id
       };
       formData.append("listFrame", JSON.stringify(dict))
     }
+    const response = await fetch('https://localhost:8000/dataFrame',{
+      method: 'post',
+      body: formData,
+    }).then(response => response.json())
+    console.log(response)
+    formData.delete('listFrame')
   }
-  fetch('https://localhost:8000/dataFrame',{
-    method: 'post',
-    body: formData,
-  })
 }
 
 

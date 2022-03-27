@@ -18,24 +18,19 @@ async def root(name: str):
 
 @app.post("/Frame")
 async def create_upload_file(data: Client):
-    dict_frame_client = {}
+    dict_frame_client = []
     for frame in data.frameArray:
         res = json.loads(frame)
         frame_to_cv2 = cvt_ImageCv2(res["frame"])
-        if res["name"] not in dict_frame_client.keys():
-            dict_frame_client[res["name"]] = [frame_to_cv2]
-        else:
-            dict_frame_client[res["name"]].append(frame_to_cv2)
-    f, axarr = plt.subplots(len(dict_frame_client.keys()) + 1, 10, figsize=(20, 20))
-    idx = 0
-    for key in dict_frame_client.keys():
-        for id_frame, frame in enumerate(dict_frame_client[key]):
-            axarr[idx, id_frame].imshow(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
-            axarr[idx, id_frame].axis('off')
-        idx += 1
-    plt.show()
-    encoded_string = base64.b64encode(dict_frame_client["localVideo"][0])
+        base64_frame_client = res["frame"]
+        video_id = res["name"]
+        dict_frame_client.append(frame_to_cv2)
+    f, axarr = plt.subplots(2, 5, figsize=(20, 20))
+    for id_frame, frame in enumerate(dict_frame_client):
+        axarr[id_frame//5, id_frame%5].imshow(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
+        axarr[id_frame//5, id_frame%5].axis('off')
     return {
         "data": "attack",
-        "image": encoded_string
+        "video_id": video_id,
+        "image": base64_frame_client
     }
