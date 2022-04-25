@@ -1,14 +1,15 @@
 import base64
 import json
 import pickle
-
+from unittest import result
 import cv2
 import numpy as np
+
 from fastapi import FastAPI
 from matplotlib import pyplot as plt
-
 from FastAPI.Products.Client import Client
-from FastAPI.utils.cvt_Image import cvt_ImageCv2
+from FastAPI.utils.cvt_Image import cvt_ImagePIL
+from FastAPI.utils.cvt_Image import predict
 
 app = FastAPI()
 
@@ -18,19 +19,26 @@ async def root(name: str):
 
 @app.post("/Frame")
 async def create_upload_file(data: Client):
-    dict_frame_client = []
+    idx = 0
+    list_frame_client = []
     for frame in data.frameArray:
         res = json.loads(frame)
-        frame_to_cv2 = cvt_ImageCv2(res["frame"])
-        base64_frame_client = res["frame"]
-        video_id = res["name"]
-        dict_frame_client.append(frame_to_cv2)
-    f, axarr = plt.subplots(2, 5, figsize=(20, 20))
-    for id_frame, frame in enumerate(dict_frame_client):
-        axarr[id_frame//5, id_frame%5].imshow(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
-        axarr[id_frame//5, id_frame%5].axis('off')
+        frame_to_cv2 = cvt_ImagePIL(res["frame"])
+        if idx==0:
+            base64_frame_client = res["frame"]
+        list_frame_client.append(frame_to_cv2)
+        idx += 1
+    
+    # predict(list_frame_client)
+    # f, axarr = plt.subplots(2, 10, figsize=(20, 20))
+    # for id_frame, frame in enumerate(list_frame_client):
+    #     axarr[0, id_frame%10].imshow(frame)
+    #     axarr[0, id_frame%10].axis('off')
+    # plt.show()
+
     return {
-        "data": "attack",
-        "video_id": video_id,
-        "image": base64_frame_client
+        "result" : {
+            "data": predict(list_frame_client),
+            "image": base64_frame_client
+        }
     }

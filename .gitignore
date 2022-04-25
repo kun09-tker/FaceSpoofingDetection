@@ -43,7 +43,9 @@ FSDmeeting/jspm_packages/
 FSDmeeting/frameData/
 FSDmeeting/ngrok-stable-windows-amd64.zip/
 FSDmeeting.zip/
-Data/
+dataset/
+dataset_sample/
+dumamay/
 .idea/
 __pycache__/
 

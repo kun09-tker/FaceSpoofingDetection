@@ -54,10 +54,10 @@ let constraints = {
   audio: true,
   video: {
     width: {
-      max: 400,
+      max: 600,
     },
     height: {
-      max: 400,
+      max: 600,
     },
   },
 };
@@ -287,22 +287,49 @@ function removeLocalStream() {
   return data;
 }
 
-
+let tableBody = document.querySelector(".table-body");
 async function toggleRecord() {
+  tableBody.innerHTML="";
   const formData = new FormData(); 
   for (let vid of videos.children){
-    for(let i = 0; i < 10; i++){
-      const dict = {
-        frame: getFrame(vid),
-        name: vid.id
-      };
-      formData.append("listFrame", JSON.stringify(dict))
+    for(let i = 0; i < 20; i++){
+      if(i%2==0){
+        const dict = {
+          frame: getFrame(vid),
+          name: vid.id
+        };
+        formData.append("listFrame", JSON.stringify(dict))
+      }
     }
     const response = await fetch('https://localhost:8000/dataFrame',{
       method: 'post',
       body: formData,
     }).then(response => response.json())
-    console.log(response)
+    const {data,image} = response.result;
+    // attack || real
+    let tableItem = document.createElement("tr")
+    let rawHTML =""
+    if(data ==="attack"){
+      rawHTML = `
+      <td>
+          <img src="${image}" atl=""/>
+      </td>
+      <td>
+          <p class="red">${data}</p>
+      </td>`
+    }
+    else {
+      rawHTML = `
+      <td>
+          <img src="${image}" atl=""/>
+      </td>
+      <td>
+          <p class="green">${data}</p>
+      </td>`
+    }
+      tableItem.innerHTML = rawHTML
+      // console.log(tableItem)
+    tableBody.appendChild(tableItem)
     formData.delete('listFrame')
   }
 }

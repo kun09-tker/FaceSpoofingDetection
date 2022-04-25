@@ -1,0 +1,75 @@
+.video-container {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+}
+.video-container video{
+    flex-shrink: 0;
+    flex-grow: 1;
+    max-width: 300px;
+    display: block;
+}
+
+
+.settings {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin: 2px 2px;
+    cursor: pointer;
+}
+.button-container{
+    display: flex;
+    gap:4px; 
+    flex-wrap: wrap;
+}
+
+.container{
+    width: 100%;
+    display: flex;
+}
+.container_left{
+    flex:1 1 70%;
+    
+}
+.container_right{
+    flex:1 1 30%;
+    height: 100vh;
+    overflow: auto;
+}
+.container_right table{
+    height: 100%;
+    overflow: auto;
+    width: 100%;
+}
+.container_right table,.container_right th,.container_right td{
+    border: 1px solid black;
+}
+.container_right th,.container_right td{
+    padding: 8px;
+    text-align: center;
+}
+.container_right td{
+    font-size: 34px;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+.container_right td p.red{
+    color: red;
+}
+.container_right td p.green{
+    color: green;
+}
+
+.container_right img{
+    width: 100%;
+    object-fit: contain;
+    height: 150px;
+}
+/* XONG ROI */

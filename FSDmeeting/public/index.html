@@ -3,49 +3,39 @@
 <head>
     <script lang="text/javascript" src="/socket.io/socket.io.js"></script>
     <script src="/simple-peer/simplepeer.min.js"></script>
-    <style>
-        .containers {
-            display: grid;
-            grid-gap: 5px;
-            grid-template-columns: repeat(4,1fr);
-        }
-
-        .container {
-            display: flex;
-        }
-
-        .vid {
-            width: 100%;
-            object-fit: cover;
-            height: 400px;
-            display: block;
-        }
-
-        .settings {
-            background-color: #4CAF50;
-            border: none;
-            color: white;
-            padding: 5px 10px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 14px;
-            margin: 2px 2px;
-            cursor: pointer;
-        }
-    </style>
+    <link rel="stylesheet" href="./style.css">
 </head>
 
 <body>
-    <button id="record" class="settings" onclick="toggleRecord()">Record</button>
-    <div id="videos" class="containers">
-        <video id="localVideo" class="vid" autoplay muted></video>
+    <div class="container">
+        <div class="container_left">
+            <div class="button-container">
+                <button id="record" class="settings" onclick="toggleRecord()">Detect</button>
+                <button id="muteButton" class="settings" onclick="toggleMute()">Speaking</button>
+                <button id="vidButton" class="settings" onclick="toggleVid()">Video Enabled</button>
+        
+            </div>
+            <div id="videos" class="video-container">
+                <video id="localVideo" class="vid" autoplay muted></video>
+            </div>
+        </div>
+       <div class="container_right">
+           <table>
+               <thead>
+                   <tr>
+                       <th>Images</th>
+                       <th>Types</th>
+                   </tr>
+               </thead>
+               <tbody class="table-body">
+                   
+               </tbody>
+           </table>
+        </div>
+       </div>
     </div>
+   
     <br />
-    <div style="display:block">
-        <button id="muteButton" class="settings" onclick="toggleMute()">Speaking</button>
-        <button id="vidButton" class="settings" onclick="toggleVid()">Video Enabled</button>
-    </div>
     
 </body>
 <footer>
