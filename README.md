@@ -23,13 +23,13 @@ Replay-Attack Dataset
 *I. Chingovska, A. Anjos, S. Marcel,"On the Effectiveness of Local Binary Patterns in Face Anti-spoofing"; IEEE BIOSIG, 2012.*
 
 ## Mô hình
-![alt text](image//PlotModel.png)
+![alt text](image/PlotModel.png)
 
 ## Đánh giá
 
 **Consfusion Matrix**
 
-![alt text](image//ConsfusionMatrix.png)
+![alt text](image/ConsfusionMatrix.png)
 
 ## Đóng góp 
 - Đề tài tập trung nghiên cứu, phát triển về lý thuyết và ứng dụng đối với hướng tiếp cận bài toán phát hiện gian lận điểm danh trong lớp học trực tuyến.
